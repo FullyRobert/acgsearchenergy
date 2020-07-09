@@ -4,6 +4,15 @@
       id="HotBloodUL"
       style="list-style:none;"
     >
+      <div align="center">
+        <v-alert
+          v-if="list.list===''||list.list.length===0"
+          max-width="50%"
+          color="warning"
+        >
+          找不到与您输入的关键词相匹配的词条，请重试
+        </v-alert>
+      </div>
       <li
         v-for="hits in list.list"
         id="HotBloodLI"
@@ -12,8 +21,7 @@
   width: 20%;list-style: none;
   display: inline-block;
   margin: 3px;
-  margin-left: 4%;
-  float: left;"
+  margin-left: 4%;"
       >
         <v-card
           :loading="loading"
@@ -22,10 +30,10 @@
         >
           <v-img
             height="15%"
-            src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+            :src="hits._source.cover_url"
           />
 
-          <v-card-title>Cafe Badilico</v-card-title>
+          <v-card-title>{{ hits._source.name }}</v-card-title>
 
           <v-card-text>
             <v-row
@@ -33,7 +41,7 @@
               class="mx-0"
             >
               <v-rating
-                :value="4.5"
+                :value="hits._source.rating_score/2"
                 color="amber"
                 dense
                 half-increments
@@ -42,20 +50,22 @@
               />
 
               <div class="grey--text ml-4">
-                4.5 (413)
+                {{ hits._source.rating_score }}
               </div>
             </v-row>
 
             <div class="my-4 subtitle-1">
-              $ • Italian, Cafe
+              {{ hits._source.areas[0] }}
             </div>
 
-            <div>Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.</div>
+            <div style="width:90%">
+              {{ hits._source.description }}...
+            </div>
           </v-card-text>
 
           <v-divider class="mx-4" />
 
-          <v-card-title>Tonight's availability</v-card-title>
+          <v-card-title>声优</v-card-title>
 
           <v-card-text>
             <v-chip-group
@@ -63,25 +73,44 @@
               active-class="deep-purple accent-4 white--text"
               column
             >
-              <v-chip>5:30PM</v-chip>
+              <div style="width:90%">
+                <div
+                  v-for="(cv,index) in hits._source.cv_list.cv"
+                  :key="cv"
+                >
+                  <tr v-if="index%2==0">
+                    <td
+                      v-if="cv.indexOf(list.key) != -1"
+                    >
+                      <p style="color:#C00000;">
+                        {{ cv }}
+                      </p>
+                    </td>
+                    <td
+                      v-else
+                    >
+                      <p>
+                        {{ cv }}
+                      </p>
+                    </td>
+                    <td v-if="index+1< hits._source.cv_list.cv.length">
+                      <template v-if="hits._source.cv_list.cv[index+1].indexOf(list.key) != -1">
+                        <p style="color:#C00000;margin-left:70px;width:140%">
+                          {{ hits._source.cv_list.cv[index+1] }}
+                        </p>
+                      </template>
 
-              <v-chip>7:30PM</v-chip>
-
-              <v-chip>8:00PM</v-chip>
-
-              <v-chip>9:00PM</v-chip>
+                      <template v-else>
+                        <p style="margin-left:70px;width:140%">
+                          {{ hits._source.cv_list.cv[index+1] }}
+                        </p>
+                      </template>
+                    </td>
+                  </tr>
+                </div>
+              </div>
             </v-chip-group>
           </v-card-text>
-
-          <v-card-actions>
-            <v-btn
-              color="deep-purple lighten-2"
-              text
-              @click="reserve"
-            >
-              Reserve
-            </v-btn>
-          </v-card-actions>
         </v-card>
       </li>
     </ul>
@@ -507,10 +536,10 @@
           //     },
           //   },
           // }
-          axios.post('/api2/_search', {
+          axios.post('/api1/_search', {
             query: {
               wildcard: {
-                name: this.list.key,
+                name: '*' + this.list.key + '*',
               },
             },
             // paramsSerializer: function (params) {

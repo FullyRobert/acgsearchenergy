@@ -32,7 +32,6 @@ column-count: 1;
           :loading="loading"
           class="mx-auto my-12"
           max-width="100%"
-          height
         >
           <v-img
             height="15%"
