@@ -32,6 +32,7 @@
 
     <v-text-field
       id="search"
+      v-model="input"
       :label="$t('search')"
       color="secondary"
       hide-details
@@ -164,6 +165,7 @@
     },
 
     data: () => ({
+      input: '',
       SearchContent: 0,
       notifications: [
         'Mike John Responded to your email',
@@ -183,7 +185,7 @@
         setDrawer: 'SET_DRAWER',
       }),
       GetSearchContent (e) {
-        this.SearchContent = e.target.value
+        this.SearchContent = this.input
         console.log('trigger method Search')
         Bus.$emit('Search', this.SearchContent)
       },

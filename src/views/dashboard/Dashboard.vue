@@ -2,9 +2,7 @@
   <div style="float:top">
     <ul
       id="HotBloodUL"
-      style=" list-style:none;
- display:inline;
-  white-space:nowrap;"
+      style="list-style:none;"
     >
       <li
         v-for="hits in list.list"
@@ -14,17 +12,16 @@
   width: 20%;list-style: none;
   display: inline-block;
   margin: 3px;
-  margin-left: 5px;
+  margin-left: 4%;
   float: left;"
       >
         <v-card
-
           :loading="loading"
           class="mx-auto my-12"
           max-width="100%"
         >
           <v-img
-            height="20%"
+            height="15%"
             src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
           />
 

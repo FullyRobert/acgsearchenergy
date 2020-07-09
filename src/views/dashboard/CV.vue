@@ -1,43 +1,45 @@
 <template>
   <div style="float:top">
-    <ul
+    <ol
       id="HotBloodUL"
-      style=" list-style:none;
- display:inline;
-  white-space:nowrap;"
+
+      style="list-style:none;
+column-count: 1;
+  "
     >
-    <div align="center">
-    <v-alert
-      v-if="list.list===''||list.list.length===0"
-      max-width="50%"
-      color="warning"
-    >
-    找不到与您输入的关键词相匹配的词条，请重试
-    </v-alert>
-    </div>
+      <div align="center">
+        <v-alert
+          v-if="list.list===''||list.list.length===0"
+          max-width="50%"
+          color="warning"
+        >
+          找不到与您输入的关键词相匹配的词条，请重试
+        </v-alert>
+      </div>
       <li
         v-for="hits in list.list"
         id="HotBloodLI"
         :key="hits._id"
+
         style="box-sizing: content-box;
   width: 20%;list-style: none;
   display: inline-block;
   margin: 3px;
-  margin-left: 5px;
-  float: left;"
+  margin-left: 4%;"
       >
         <v-card
 
           :loading="loading"
           class="mx-auto my-12"
           max-width="100%"
+          height
         >
           <v-img
-            height="20%"
+            height="15%"
             :src="hits._source.cover_url"
           />
 
-          <v-card-title>{{hits._source.name}}</v-card-title>
+          <v-card-title>{{ hits._source.name }}</v-card-title>
 
           <v-card-text>
             <v-row
@@ -54,15 +56,17 @@
               />
 
               <div class="grey--text ml-4">
-                {{hits._source.rating_score}}
+                {{ hits._source.rating_score }}
               </div>
             </v-row>
 
             <div class="my-4 subtitle-1">
-              {{hits._source.areas[0]}}
+              {{ hits._source.areas[0] }}
             </div>
 
-            <div>{{hits._source.description}}……</div>
+            <div style="width:90%">
+              {{ hits._source.description }}...
+            </div>
           </v-card-text>
 
           <v-divider class="mx-4" />
@@ -75,24 +79,57 @@
               active-class="deep-purple accent-4 white--text"
               column
             >
-            {{hits._source.cv_list.cv}}
-              <!--<v-chip v-for="cv in hits._source.cv_list.cv" :key="cv._id"></v-chip> -->
+              <div style="width:90%">
+                <div
+                  v-for="(cv,index) in hits._source.cv_list.cv"
+                  :key="cv"
+                >
+                  <tr v-if="index%2==0">
+                    <td
+                      v-if="cv.indexOf(list.key) != -1"
+                    >
+                      <p style="color:#C00000;">
+                        {{ cv }}
+                      </p>
+                    </td>
+                    <td
+                      v-else
+                    >
+                      <p>
+                        {{ cv }}
+                      </p>
+                    </td>
+                    <td v-if="index+1< hits._source.cv_list.cv.length">
+                      <template v-if="hits._source.cv_list.cv[index+1].indexOf(list.key) != -1">
+                        <p style="color:#C00000;margin-left:70px;width:140%">
+                          {{ hits._source.cv_list.cv[index+1] }}
+                        </p>
+                      </template>
 
+                      <template v-else>
+                        <p style="margin-left:70px;width:140%">
+                          {{ hits._source.cv_list.cv[index+1] }}
+                        </p>
+                      </template>
+                    </td>
+                  </tr>
+                </div>
+              </div>
             </v-chip-group>
           </v-card-text>
 
-          <v-card-actions>
-            <v-btn
-              color="deep-purple lighten-2"
-              text
-              @click="reserve"
-            >
-              Reserve
-            </v-btn>
-          </v-card-actions>
+        <!-- <v-card-actions>
+              <v-btn
+                color="deep-purple lighten-2"
+                text
+                @click="reserve"
+              >
+                Reserve
+              </v-btn>
+            </v-card-actions> -->
         </v-card>
       </li>
-    </ul>
+    </ol>
   </div>
   <!-- <v-container
     id="dashboard"
@@ -498,8 +535,9 @@
         loading: false,
         selection: 1,
         list: {
+
           key: '',
-          list: '',
+          list: 1,
         },
       }
     },
@@ -527,13 +565,12 @@
     mounted: function () {
       Bus.$on('Search', (data) => {
         this.list.key = data
-        console.log(this.list.list)
+        console.log(this.list.key)
       })
     },
     methods: {
       reserve () {
         this.loading = true
-
         setTimeout(() => (this.loading = false), 2000)
       },
       complete (index) {
