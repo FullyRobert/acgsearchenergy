@@ -6,6 +6,15 @@
  display:inline;
   white-space:nowrap;"
     >
+    <div align="center">
+    <v-alert
+      v-if="list.list===''||list.list.length===0"
+      max-width="50%"
+      color="warning"
+    >
+    找不到与您输入的关键词相匹配的词条，请重试
+    </v-alert>
+    </div>
       <li
         v-for="hits in list.list"
         id="HotBloodLI"
@@ -489,9 +498,8 @@
         loading: false,
         selection: 1,
         list: {
-
           key: '',
-          list: 1,
+          list: '',
         },
       }
     },
@@ -519,7 +527,7 @@
     mounted: function () {
       Bus.$on('Search', (data) => {
         this.list.key = data
-        console.log(this.list.key)
+        console.log(this.list.list)
       })
     },
     methods: {

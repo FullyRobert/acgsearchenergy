@@ -70,15 +70,6 @@
       <div />
     </v-list>
 
-    <template v-slot:append>
-      <base-item
-        :item="{
-          title: $t('upgrade'),
-          icon: 'mdi-package-up',
-          to: '/upgrade',
-        }"
-      />
-    </template>
   </v-navigation-drawer>
 </template>
 
@@ -154,7 +145,7 @@
       profile () {
         return {
           avatar: true,
-          title: this.$t('avatar'),
+          title: 'ACG百科',
         }
       },
     },
