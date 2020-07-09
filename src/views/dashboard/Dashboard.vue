@@ -1,11 +1,93 @@
 <template>
-  <div>
-    <li
-      v-for="hits in list.list"
-      :key="hits._id"
+  <div style="float:top">
+    <ul
+      id="HotBloodUL"
+      style=" list-style:none;
+ display:inline;
+  white-space:nowrap;"
     >
-      {{ hits }}
-    </li>
+      <li
+        v-for="hits in list.list"
+        id="HotBloodLI"
+        :key="hits._id"
+        style="box-sizing: content-box;
+  width: 20%;list-style: none;
+  display: inline-block;
+  margin: 3px;
+  margin-left: 5px;
+  float: left;"
+      >
+        <v-card
+
+          :loading="loading"
+          class="mx-auto my-12"
+          max-width="100%"
+        >
+          <v-img
+            height="20%"
+            src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+          />
+
+          <v-card-title>Cafe Badilico</v-card-title>
+
+          <v-card-text>
+            <v-row
+              align="center"
+              class="mx-0"
+            >
+              <v-rating
+                :value="4.5"
+                color="amber"
+                dense
+                half-increments
+                readonly
+                size="14"
+              />
+
+              <div class="grey--text ml-4">
+                4.5 (413)
+              </div>
+            </v-row>
+
+            <div class="my-4 subtitle-1">
+              $ • Italian, Cafe
+            </div>
+
+            <div>Small plates, salads & sandwiches - an intimate setting with 12 indoor seats plus patio seating.</div>
+          </v-card-text>
+
+          <v-divider class="mx-4" />
+
+          <v-card-title>Tonight's availability</v-card-title>
+
+          <v-card-text>
+            <v-chip-group
+              v-model="selection"
+              active-class="deep-purple accent-4 white--text"
+              column
+            >
+              <v-chip>5:30PM</v-chip>
+
+              <v-chip>7:30PM</v-chip>
+
+              <v-chip>8:00PM</v-chip>
+
+              <v-chip>9:00PM</v-chip>
+            </v-chip-group>
+          </v-card-text>
+
+          <v-card-actions>
+            <v-btn
+              color="deep-purple lighten-2"
+              text
+              @click="reserve"
+            >
+              Reserve
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </li>
+    </ul>
   </div>
   <!-- <v-container
     id="dashboard"
@@ -408,7 +490,10 @@
     name: 'DashboardDashboard',
     data () {
       return {
+        loading: false,
+        selection: 1,
         list: {
+
           key: '',
           list: 1,
         },
@@ -425,7 +510,7 @@
           //     },
           //   },
           // }
-          axios.get('/api2/_search', {
+          axios.post('/api2/_search', {
             query: {
               wildcard: {
                 name: this.list.key,
@@ -436,7 +521,7 @@
             // },
           }).then((res) => {
             res = res.data.hits.hits
-            this.list.list = res
+            this.$set(this.list, 'list', res)
             console.log(this.list.key)
           }).catch((error) => {
             console.warn(error)
@@ -451,9 +536,17 @@
       })
     },
     methods: {
+      reserve () {
+        this.loading = true
+
+        setTimeout(() => (this.loading = false), 2000)
+      },
       complete (index) {
         this.list[index] = !this.list[index]
       },
     },
   }
 </script>
+<style module>
+
+</style>

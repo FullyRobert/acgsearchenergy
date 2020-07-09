@@ -22,6 +22,5 @@
     data: () => ({
       expandOnHover: false,
     }),
-
   }
 </script>
