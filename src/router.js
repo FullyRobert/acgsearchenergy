@@ -19,9 +19,9 @@ export default new Router({
         },
         // Pages
         {
-          name: '恋爱系动漫',
-          path: 'pages/user',
-          component: () => import('@/views/dashboard/pages/UserProfile'),
+          name: '声优',
+          path: '/cv',
+          component: () => import('@/views/dashboard/CV'),
         },
         {
           name: '治愈系动漫',

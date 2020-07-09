@@ -107,8 +107,8 @@
         },
         {
           icon: 'mdi-account',
-          title: 'user',
-          to: '/pages/user',
+          title: 'CV',
+          to: '/CV',
         },
         {
           title: 'rtables',
