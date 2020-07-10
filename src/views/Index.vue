@@ -3,7 +3,7 @@
     <v-container
       class="fill-height align justify"
       fluid
-      :style="{ backgroundImage: `url(${backgroundUrl})`, backgroundSize: 'cover' }"
+      :style="{ backgroundImage: `url(${backgroundUrl})`, backgroundSize: 'cover', margin: '0', width: '100%', maxWidth:'100%' }"
     >
       <v-row>
         <v-col>
