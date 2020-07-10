@@ -1,8 +1,8 @@
 <template>
-  <div style="float:top">
+  <div style="float:top;">
     <div
       align="center"
-      style="margin-top: 10px"
+      style="margin-top: 10px;height:100%"
     >
       <v-alert
         v-if="list.list===''||list.list.length===0"
@@ -11,28 +11,28 @@
       >
         找不到与您输入的关键词相匹配的词条，请重试
       </v-alert>
-          <v-chip-group
-              column
-              v-if="list.list!==''&&list.list.length!==0"
-            >
-            <v-chip
-              color="success"
-              @click="SortByDefault()"
-            >
-              按相关性排序
-            </v-chip>
-            <v-chip
-              color="warning"
-              @click="SortByGrade()"
-            >
-              按评分排序
-            </v-chip>
-            <v-chip
-              color="error"
-              @click="SortByHot()"
-            >
-              按热度排序
-            </v-chip>
+      <v-chip-group
+        v-if="list.list!==''&&list.list.length!==0"
+        column
+      >
+        <v-chip
+          color="success"
+          @click="SortByDefault()"
+        >
+          按相关性排序
+        </v-chip>
+        <v-chip
+          color="warning"
+          @click="SortByGrade()"
+        >
+          按评分排序
+        </v-chip>
+        <v-chip
+          color="error"
+          @click="SortByHot()"
+        >
+          按热度排序
+        </v-chip>
       </v-chip-group>
     </div>
     <ul
@@ -41,7 +41,8 @@
      width: 96%;
      column-count: 4;
      column-width: 20%;
-     column-gap:5%;"
+     column-gap:5%;
+     "
     >
       <li
         v-for="hits in list.list"
@@ -183,6 +184,11 @@
         },
       }
     },
+    // computed: {
+    //   scrollerHeight: function () {
+    //     if (Math.floor((((this.list.list.length - 1) / 4) < 1))) { return (Math.floor(((this.list.list.length - 1) / 4 + 1)) * 45 + '%') } else { return (Math.floor(((this.list.list.length - 1) / 4)) * 30 + 50 + '%') }
+    //   },
+    // },
     watch: {
       'list.key': {
         handler (newValue, oldValue) {
@@ -195,6 +201,7 @@
           //   },
           // }
           axios.post('/api1/_search', {
+            size: 10,
             query: {
               wildcard: {
                 name: '*' + this.list.key + '*',
@@ -204,9 +211,9 @@
             //   return Qs.stringify(params, { arrayFormat: 'brackets' })
             // },
           }).then((res) => {
+            console.log(res.data.hits.hits)
             res = res.data.hits.hits
             this.$set(this.list, 'list', res)
-            console.log(this.list.key)
           }).catch((error) => {
             console.warn(error)
           })
@@ -219,6 +226,7 @@
         console.log(this.list.key)
       })
     },
+
     methods: {
       reserve () {
         this.loading = true
@@ -265,6 +273,7 @@
       },
       SortByHot () {
         axios.post('/api1/_search', {
+          size: 10,
           query: {
             wildcard: {
               name: '*' + this.list.key + '*',

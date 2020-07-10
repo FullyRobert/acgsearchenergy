@@ -1,48 +1,63 @@
 <template>
   <div style="float:top">
-      <div
-        align="center"
-        style="margin-top: 10px"
+    <div
+      class="mt-4"
+      align="center"
+    >
+      <b-card
+        img-src="https://placekitten.com/300/300"
+        img-alt="Card image"
+        img-right
+        style="width:70%;"
       >
-        <v-alert
-          v-if="list.list===''||list.list.length===0"
-          max-width="50%"
-          color="warning"
-        >
-          找不到与您输入的关键词相匹配的词条，请重试
-        </v-alert>
+        <b-card-text>
+          Some quick example text to build on the card and make up the bulk of the card's content.
+        </b-card-text>
+      </b-card>
+    </div>
+    <div
+      align="center"
+      style="margin-top: 10px"
+    >
+      <v-alert
+        v-if="list.list===''||list.list.length===0"
+        max-width="50%"
+        color="warning"
+      >
+        找不到与您输入的关键词相匹配的词条，请重试
+      </v-alert>
       <v-chip-group
-              column
-              v-if="list.list!==''&&list.list.length!==0"
-            >
-            <v-chip
-              color="success"
-              @click="SortByDefault()"
-            >
-              按相关性排序
-            </v-chip>
-            <v-chip
-              color="warning"
-              @click="SortByGrade()"
-            >
-              按评分排序
-            </v-chip>
-            <v-chip
-              color="error"
-              @click="SortByHot()"
-            >
-              按热度排序
-            </v-chip>
+        v-if="list.list!==''&&list.list.length!==0"
+        column
+      >
+        <v-chip
+          color="success"
+          @click="SortByDefault()"
+        >
+          按相关性排序
+        </v-chip>
+        <v-chip
+          color="warning"
+          @click="SortByGrade()"
+        >
+          按评分排序
+        </v-chip>
+        <v-chip
+          color="error"
+          @click="SortByHot()"
+        >
+          按热度排序
+        </v-chip>
       </v-chip-group>
-      </div>
-      <ul
+    </div>
+    <ul
       id="HotBloodUL"
       style="     margin-left:2%;
      width: 96%;
      column-count: 4;
      column-width: 20%;
      column-gap:5%;"
-      >
+    >
       <li
         v-for="hits in list.list"
         id="HotBloodLI"
@@ -84,28 +99,28 @@
             </v-row>
 
             <div class="my-4 subtitle-1">
-            <v-chip-group
-              column
-            >
-            <v-chip
-              color="success"
-              v-if="hits._source.tag_list.length>0"
-            >
-              {{hits._source.tag_list[0]}}
-            </v-chip>
-            <v-chip
-              color="warning"
-              v-if="hits._source.tag_list.length>1"
-            >
-              {{hits._source.tag_list[1]}}
-            </v-chip>
-            <v-chip
-              color="error"
-              v-if="hits._source.tag_list.length>2"
-            >
-              {{hits._source.tag_list[2]}}
-            </v-chip>
-            </v-chip-group>
+              <v-chip-group
+                column
+              >
+                <v-chip
+                  v-if="hits._source.tag_list.length>0"
+                  color="success"
+                >
+                  {{ hits._source.tag_list[0] }}
+                </v-chip>
+                <v-chip
+                  v-if="hits._source.tag_list.length>1"
+                  color="warning"
+                >
+                  {{ hits._source.tag_list[1] }}
+                </v-chip>
+                <v-chip
+                  v-if="hits._source.tag_list.length>2"
+                  color="error"
+                >
+                  {{ hits._source.tag_list[2] }}
+                </v-chip>
+              </v-chip-group>
             </div>
 
             <div style="width:90%">
@@ -173,7 +188,7 @@
             </v-card-actions> -->
         </v-card>
       </li>
-      </ul>
+    </ul>
   </div>
 </template>
 
