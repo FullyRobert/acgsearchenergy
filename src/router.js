@@ -9,6 +9,10 @@ export default new Router({
   routes: [
     {
       path: '/',
+      component: () => import('@/views/Index'),
+    },
+    {
+      path: '/search',
       component: () => import('@/views/dashboard/Index'),
       children: [
         // Dashboard

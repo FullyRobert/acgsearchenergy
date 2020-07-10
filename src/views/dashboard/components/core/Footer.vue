@@ -67,6 +67,7 @@
 
 <style lang="sass">
   #dashboard-core-footer
+    height: 65px
     a
       font-size: .825rem
       font-weight: 500
