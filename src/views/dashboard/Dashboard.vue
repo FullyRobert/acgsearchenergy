@@ -1,34 +1,60 @@
 <template>
-  <div style="float:top">
+  <div style="float:top;">
+    <div
+      align="center"
+      style="margin-top: 10px;margin-left:10px"
+    >
+      <v-alert
+        v-if="list.list===''||list.list.length===0"
+        max-width="50%"
+        color="warning"
+      >
+        找不到与您输入的关键词相匹配的词条，请重试
+      </v-alert>
+          <v-chip-group
+              column
+              v-if="list.list!==''&&list.list.length!==0"
+            >
+            <v-chip
+              color="success"
+              @click="SortByDefault()"
+            >
+              按相关性排序
+            </v-chip>
+            <v-chip
+              color="warning"
+              @click="SortByGrade()"
+            >
+              按评分排序
+            </v-chip>
+            <v-chip
+              color="error"
+              @click="SortByHot()"
+            >
+              按热度排序
+            </v-chip>
+          </v-chip-group>
+    </div>
     <ul
       id="HotBloodUL"
-      style="list-style:none;"
+      style="     margin-left:2%;
+     width: 96%;
+     display: inline-block;
+     column-count: 4;
+     column-width: 20%;
+     column-gap:5%;
+     "
     >
-      <div
-        align="center"
-        style="margin-top: 10px"
-      >
-        <v-alert
-          v-if="list.list===''||list.list.length===0"
-          max-width="50%"
-          color="warning"
-        >
-          找不到与您输入的关键词相匹配的词条，请重试
-        </v-alert>
-      </div>
       <li
         v-for="hits in list.list"
         id="HotBloodLI"
         :key="hits._id"
-        style="box-sizing: content-box;
-  width: 20%;list-style: none;
-  display: inline-block;
-  margin: 3px;
-  margin-left: 4%;"
+        style="
+          display: inline-block;width:100%;"
       >
         <v-card
           :loading="loading"
-          class="mx-auto my-12"
+          class="mx-auto my-6"
           max-width="100%"
         >
           <v-img
@@ -59,28 +85,28 @@
             </v-row>
 
             <div class="my-4 subtitle-1">
-            <v-chip-group
-              column
-            >
-            <v-chip
-              color="success"
-              v-if="hits._source.tag_list.length>0"
-            >
-              {{hits._source.tag_list[0]}}
-            </v-chip>
-            <v-chip
-              color="warning"
-              v-if="hits._source.tag_list.length>1"
-            >
-              {{hits._source.tag_list[1]}}
-            </v-chip>
-            <v-chip
-              color="error"
-              v-if="hits._source.tag_list.length>2"
-            >
-              {{hits._source.tag_list[2]}}
-            </v-chip>
-            </v-chip-group>
+              <v-chip-group
+                column
+              >
+                <v-chip
+                  v-if="hits._source.tag_list.length>0"
+                  color="success"
+                >
+                  {{ hits._source.tag_list[0] }}
+                </v-chip>
+                <v-chip
+                  v-if="hits._source.tag_list.length>1"
+                  color="warning"
+                >
+                  {{ hits._source.tag_list[1] }}
+                </v-chip>
+                <v-chip
+                  v-if="hits._source.tag_list.length>2"
+                  color="error"
+                >
+                  {{ hits._source.tag_list[2] }}
+                </v-chip>
+              </v-chip-group>
             </div>
 
             <div style="width:90%">
@@ -120,13 +146,13 @@
                     </td>
                     <td v-if="index+1< hits._source.cv_list.cv.length">
                       <template v-if="hits._source.cv_list.cv[index+1].indexOf(list.key) != -1">
-                        <p style="color:#C00000;margin-left:70px;width:140%">
+                        <p style="color:#C00000;margin-left:40%;width:140%">
                           {{ hits._source.cv_list.cv[index+1] }}
                         </p>
                       </template>
 
                       <template v-else>
-                        <p style="margin-left:70px;width:140%">
+                        <p style="margin-left:40%;width:140%">
                           {{ hits._source.cv_list.cv[index+1] }}
                         </p>
                       </template>
@@ -140,397 +166,6 @@
       </li>
     </ul>
   </div>
-  <!-- <v-container
-    id="dashboard"
-    fluid
-    tag="section"
-  >
-    <v-row>
-      <v-col
-        cols="12"
-        lg="4"
-      >
-        <base-material-chart-card
-          :data="emailsSubscriptionChart.data"
-          :options="emailsSubscriptionChart.options"
-          :responsive-options="emailsSubscriptionChart.responsiveOptions"
-          color="#E91E63"
-          hover-reveal
-          type="Bar"
-        >
-          <template v-slot:reveal-actions>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ attrs, on }">
-                <v-btn
-                  v-bind="attrs"
-                  color="info"
-                  icon
-                  v-on="on"
-                >
-                  <v-icon
-                    color="info"
-                  >
-                    mdi-refresh
-                  </v-icon>
-                </v-btn>
-              </template>
-
-              <span>Refresh</span>
-            </v-tooltip>
-
-            <v-tooltip bottom>
-              <template v-slot:activator="{ attrs, on }">
-                <v-btn
-                  v-bind="attrs"
-                  light
-                  icon
-                  v-on="on"
-                >
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
-              </template>
-
-              <span>Change Date</span>
-            </v-tooltip>
-          </template>
-
-          <h4 class="card-title font-weight-light mt-2 ml-2">
-            Website Views
-          </h4>
-
-          <p class="d-inline-flex font-weight-light ml-2 mt-1">
-            Last Campaign Performance
-          </p>
-
-          <template v-slot:actions>
-            <v-icon
-              class="mr-1"
-              small
-            >
-              mdi-clock-outline
-            </v-icon>
-            <span class="caption grey--text font-weight-light">updated 10 minutes ago</span>
-          </template>
-        </base-material-chart-card>
-      </v-col>
-
-      <v-col
-        cols="12"
-        lg="4"
-      >
-        <base-material-chart-card
-          :data="dailySalesChart.data"
-          :options="dailySalesChart.options"
-          color="success"
-          hover-reveal
-          type="Line"
-        >
-          <template v-slot:reveal-actions>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ attrs, on }">
-                <v-btn
-                  v-bind="attrs"
-                  color="info"
-                  icon
-                  v-on="on"
-                >
-                  <v-icon
-                    color="info"
-                  >
-                    mdi-refresh
-                  </v-icon>
-                </v-btn>
-              </template>
-
-              <span>Refresh</span>
-            </v-tooltip>
-
-            <v-tooltip bottom>
-              <template v-slot:activator="{ attrs, on }">
-                <v-btn
-                  v-bind="attrs"
-                  light
-                  icon
-                  v-on="on"
-                >
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
-              </template>
-
-              <span>Change Date</span>
-            </v-tooltip>
-          </template>
-
-          <h4 class="card-title font-weight-light mt-2 ml-2">
-            Daily Sales
-          </h4>
-
-          <p class="d-inline-flex font-weight-light ml-2 mt-1">
-            <v-icon
-              color="green"
-              small
-            >
-              mdi-arrow-up
-            </v-icon>
-            <span class="green--text">55%</span>&nbsp;
-            increase in today's sales
-          </p>
-
-          <template v-slot:actions>
-            <v-icon
-              class="mr-1"
-              small
-            >
-              mdi-clock-outline
-            </v-icon>
-            <span class="caption grey--text font-weight-light">updated 4 minutes ago</span>
-          </template>
-        </base-material-chart-card>
-      </v-col>
-
-      <v-col
-        cols="12"
-        lg="4"
-      >
-        <base-material-chart-card
-          :data="dataCompletedTasksChart.data"
-          :options="dataCompletedTasksChart.options"
-          hover-reveal
-          color="info"
-          type="Line"
-        >
-          <template v-slot:reveal-actions>
-            <v-tooltip bottom>
-              <template v-slot:activator="{ attrs, on }">
-                <v-btn
-                  v-bind="attrs"
-                  color="info"
-                  icon
-                  v-on="on"
-                >
-                  <v-icon
-                    color="info"
-                  >
-                    mdi-refresh
-                  </v-icon>
-                </v-btn>
-              </template>
-
-              <span>Refresh</span>
-            </v-tooltip>
-
-            <v-tooltip bottom>
-              <template v-slot:activator="{ attrs, on }">
-                <v-btn
-                  v-bind="attrs"
-                  light
-                  icon
-                  v-on="on"
-                >
-                  <v-icon>mdi-pencil</v-icon>
-                </v-btn>
-              </template>
-
-              <span>Change Date</span>
-            </v-tooltip>
-          </template>
-
-          <h3 class="card-title font-weight-light mt-2 ml-2">
-            Completed Tasks
-          </h3>
-
-          <p class="d-inline-flex font-weight-light ml-2 mt-1">
-            Last Last Campaign Performance
-          </p>
-
-          <template v-slot:actions>
-            <v-icon
-              class="mr-1"
-              small
-            >
-              mdi-clock-outline
-            </v-icon>
-            <span class="caption grey--text font-weight-light">campaign sent 26 minutes ago</span>
-          </template>
-        </base-material-chart-card>
-      </v-col>
-
-      <v-col
-        cols="12"
-        sm="6"
-        lg="3"
-      >
-        <base-material-stats-card
-          color="info"
-          icon="mdi-twitter"
-          title="Followers"
-          value="+245"
-          sub-icon="mdi-clock"
-          sub-text="Just Updated"
-        />
-      </v-col>
-
-      <v-col
-        cols="12"
-        sm="6"
-        lg="3"
-      >
-        <base-material-stats-card
-          color="primary"
-          icon="mdi-poll"
-          title="Website Visits"
-          value="75.521"
-          sub-icon="mdi-tag"
-          sub-text="Tracked from Google Analytics"
-        />
-      </v-col>
-
-      <v-col
-        cols="12"
-        sm="6"
-        lg="3"
-      >
-        <base-material-stats-card
-          color="success"
-          icon="mdi-store"
-          title="Revenue"
-          value="$ 34,245"
-          sub-icon="mdi-calendar"
-          sub-text="Last 24 Hours"
-        />
-      </v-col>
-
-      <v-col
-        cols="12"
-        sm="6"
-        lg="3"
-      >
-        <base-material-stats-card
-          color="orange"
-          icon="mdi-sofa"
-          title="Bookings"
-          value="184"
-          sub-icon="mdi-alert"
-          sub-icon-color="red"
-          sub-text="Get More Space..."
-        />
-      </v-col>
-
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <base-material-card
-          color="warning"
-          class="px-5 py-3"
-        >
-          <template v-slot:heading>
-            <div class="display-2 font-weight-light">
-              Employees Stats
-            </div>
-
-            <div class="subtitle-1 font-weight-light">
-              New employees on 15th September, 2016
-            </div>
-          </template>
-          <v-card-text>
-            <v-data-table
-              :headers="headers"
-              :items="items"
-            />
-          </v-card-text>
-        </base-material-card>
-      </v-col>
-
-      <v-col
-        cols="12"
-        md="6"
-      >
-        <base-material-card class="px-5 py-3">
-          <template v-slot:heading>
-            <v-tabs
-              v-model="tabs"
-              background-color="transparent"
-              slider-color="white"
-            >
-              <span
-                class="subheading font-weight-light mx-3"
-                style="align-self: center"
-              >Tasks:</span>
-              <v-tab class="mr-3">
-                <v-icon class="mr-2">
-                  mdi-bug
-                </v-icon>
-                Bugs
-              </v-tab>
-              <v-tab class="mr-3">
-                <v-icon class="mr-2">
-                  mdi-code-tags
-                </v-icon>
-                Website
-              </v-tab>
-              <v-tab>
-                <v-icon class="mr-2">
-                  mdi-cloud
-                </v-icon>
-                Server
-              </v-tab>
-            </v-tabs>
-          </template>
-
-          <v-tabs-items
-            v-model="tabs"
-            class="transparent"
-          >
-            <v-tab-item
-              v-for="n in 3"
-              :key="n"
-            >
-              <v-card-text>
-                <template v-for="(task, i) in tasks[tabs]">
-                  <v-row
-                    :key="i"
-                    align="center"
-                  >
-                    <v-col cols="1">
-                      <v-list-item-action>
-                        <v-checkbox
-                          v-model="task.value"
-                          color="secondary"
-                        />
-                      </v-list-item-action>
-                    </v-col>
-
-                    <v-col cols="9">
-                      <div
-                        class="font-weight-light"
-                        v-text="task.text"
-                      />
-                    </v-col>
-
-                    <v-col
-                      cols="2"
-                      class="text-right"
-                    >
-                      <v-icon class="mx-1">
-                        mdi-pencil
-                      </v-icon>
-                      <v-icon
-                        color="error"
-                        class="mx-1"
-                      >
-                        mdi-close
-                      </v-icon>
-                    </v-col>
-                  </v-row>
-                </template>
-              </v-card-text>
-            </v-tab-item>
-          </v-tabs-items>
-        </base-material-card>
-      </v-col>
-    </v-row>
-  </v-container> -->
 </template>
 
 <script>
@@ -550,6 +185,11 @@
         },
       }
     },
+    // computed: {
+    //   scrollerHeight: function () {
+    //     if (Math.floor((((this.list.list.length - 1) / 4) < 1))) { return (Math.floor(((this.list.list.length - 1) / 4 + 1)) * 45 + '%') } else { return (Math.floor(((this.list.list.length - 1) / 4)) * 30 + 50 + '%') }
+    //   },
+    // },
     watch: {
       'list.key': {
         handler (newValue, oldValue) {
@@ -562,6 +202,7 @@
           //   },
           // }
           axios.post('/api1/_search', {
+            size: 10,
             query: {
               wildcard: {
                 name: '*' + this.list.key + '*',
@@ -571,9 +212,9 @@
             //   return Qs.stringify(params, { arrayFormat: 'brackets' })
             // },
           }).then((res) => {
+            console.log(res.data.hits.hits)
             res = res.data.hits.hits
             this.$set(this.list, 'list', res)
-            console.log(this.list.key)
           }).catch((error) => {
             console.warn(error)
           })
@@ -586,6 +227,7 @@
         console.log(this.list.key)
       })
     },
+
     methods: {
       reserve () {
         this.loading = true
@@ -594,6 +236,61 @@
       },
       complete (index) {
         this.list[index] = !this.list[index]
+      },
+      SortByGrade () {
+        axios.post('/api1/_search', {
+          query: {
+            wildcard: {
+              name: '*' + this.list.key + '*',
+            },
+          },
+          sort: {
+            rating_score: 'desc',
+          },
+        }).then((res) => {
+          res = res.data.hits.hits
+          this.$set(this.list, 'list', res)
+          console.log(this.list)
+        }).catch((error) => {
+          console.warn(error)
+        })
+        console.log('SortByName')
+      },
+      SortByDefault () {
+        axios.post('/api1/_search', {
+          query: {
+            wildcard: {
+              name: '*' + this.list.key + '*',
+            },
+          },
+        }).then((res) => {
+          res = res.data.hits.hits
+          this.$set(this.list, 'list', res)
+          console.log(this.list)
+        }).catch((error) => {
+          console.warn(error)
+        })
+        console.log('SortByDefault')
+      },
+      SortByHot () {
+        axios.post('/api1/_search', {
+          size: 10,
+          query: {
+            wildcard: {
+              name: '*' + this.list.key + '*',
+            },
+          },
+          sort: {
+            views: 'desc',
+          },
+        }).then((res) => {
+          res = res.data.hits.hits
+          this.$set(this.list, 'list', res)
+          console.log(this.list)
+        }).catch((error) => {
+          console.warn(error)
+        })
+        console.log('SortByGrade')
       },
     },
   }

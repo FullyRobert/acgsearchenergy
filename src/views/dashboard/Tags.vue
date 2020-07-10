@@ -1,17 +1,17 @@
 <template>
   <div style="float:top">
-      <div
-        align="center"
-        style="margin-top: 10px;margin-left:10px"
+    <div
+      align="center"
+      style="margin-top: 10px;margin-left:10px"
+    >
+      <v-alert
+        v-if="list.list===''||list.list.length===0"
+        max-width="50%"
+        color="warning"
       >
-        <v-alert
-          v-if="list.list===''||list.list.length===0"
-          max-width="50%"
-          color="warning"
-        >
-          找不到与您输入的关键词相匹配的词条，请重试
-        </v-alert>
-        <v-chip-group
+        找不到与您输入的关键词相匹配的词条，请重试
+      </v-alert>
+          <v-chip-group
               column
               v-if="list.list!==''&&list.list.length!==0"
             >
@@ -34,15 +34,16 @@
               按热度排序
             </v-chip>
           </v-chip-group>
-      </div>
-       <ul
+    </div>
+    <ul
       id="HotBloodUL"
       style="     margin-left:2%;
      width: 96%;
+     display: inline-block;
      column-count: 4;
      column-width: 20%;
      column-gap:5%;"
-      >
+    >
       <li
         v-for="hits in list.list"
         id="HotBloodLI"
@@ -51,7 +52,6 @@
           display: inline-block;width:100%;"
       >
         <v-card
-
           :loading="loading"
           class="mx-auto my-6"
           max-width="100%"
@@ -84,28 +84,28 @@
             </v-row>
 
             <div class="my-4 subtitle-1">
-            <v-chip-group
-              column
-            >
-            <v-chip
-              color="success"
-              v-if="hits._source.tag_list.length>0"
-            >
-              {{hits._source.tag_list[0]}}
-            </v-chip>
-            <v-chip
-              color="warning"
-              v-if="hits._source.tag_list.length>1"
-            >
-              {{hits._source.tag_list[1]}}
-            </v-chip>
-            <v-chip
-              color="error"
-              v-if="hits._source.tag_list.length>2"
-            >
-              {{hits._source.tag_list[2]}}
-            </v-chip>
-            </v-chip-group>
+              <v-chip-group
+                column
+              >
+                <v-chip
+                  v-if="hits._source.tag_list.length>0"
+                  color="success"
+                >
+                  {{ hits._source.tag_list[0] }}
+                </v-chip>
+                <v-chip
+                  v-if="hits._source.tag_list.length>1"
+                  color="warning"
+                >
+                  {{ hits._source.tag_list[1] }}
+                </v-chip>
+                <v-chip
+                  v-if="hits._source.tag_list.length>2"
+                  color="error"
+                >
+                  {{ hits._source.tag_list[2] }}
+                </v-chip>
+              </v-chip-group>
             </div>
 
             <div style="width:90%">
@@ -114,7 +114,6 @@
           </v-card-text>
 
           <v-divider class="mx-4" />
-
           <v-card-title>角色</v-card-title>
 
           <v-card-text>
@@ -189,16 +188,16 @@
         handler (newValue, oldValue) {
           console.log('value changed')
           axios.post('/api1/_search', {
+            size: 20,
             query: {
               wildcard: {
-                'cv_list.character': '*' + this.list.key + '*',
+                tag_list: '*' + this.list.key + '*',
               },
             },
-
           }).then((res) => {
             res = res.data.hits.hits
             this.$set(this.list, 'list', res)
-            console.log(this.list)
+            console.log(this.list.key)
           }).catch((error) => {
             console.warn(error)
           })
@@ -214,6 +213,7 @@
     methods: {
       reserve () {
         this.loading = true
+
         setTimeout(() => (this.loading = false), 2000)
       },
       complete (index) {
@@ -221,9 +221,10 @@
       },
       SortByGrade () {
         axios.post('/api1/_search', {
+          size: 20,
           query: {
             wildcard: {
-              'cv_list.character': '*' + this.list.key + '*',
+              tag_list: '*' + this.list.key + '*',
             },
           },
           sort: {
@@ -240,9 +241,10 @@
       },
       SortByDefault () {
         axios.post('/api1/_search', {
+          size: 20,
           query: {
             wildcard: {
-              'cv_list.character': '*' + this.list.key + '*',
+              tag_list: '*' + this.list.key + '*',
             },
           },
         }).then((res) => {
@@ -256,9 +258,10 @@
       },
       SortByHot () {
         axios.post('/api1/_search', {
+          size: 20,
           query: {
             wildcard: {
-              'cv_list.character': '*' + this.list.key + '*',
+              tag_list: '*' + this.list.key + '*',
             },
           },
           sort: {
