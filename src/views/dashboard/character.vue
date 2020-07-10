@@ -95,7 +95,7 @@ column-count: 1;
 
           <v-divider class="mx-4" />
 
-          <v-card-title>声优</v-card-title>
+          <v-card-title>角色</v-card-title>
 
           <v-card-text>
             <v-chip-group
@@ -105,34 +105,34 @@ column-count: 1;
             >
               <div style="width:90%">
                 <div
-                  v-for="(cv,index) in hits._source.cv_list.cv"
-                  :key="cv"
+                  v-for="(character,index) in hits._source.cv_list.character"
+                  :key="character"
                 >
                   <tr v-if="index%2==0">
                     <td
-                      v-if="cv.indexOf(list.key) != -1"
+                      v-if="character.indexOf(list.key) != -1"
                     >
                       <p style="color:#C00000;">
-                        {{ cv }}
+                        {{ character }}
                       </p>
                     </td>
                     <td
                       v-else
                     >
                       <p>
-                        {{ cv }}
+                        {{ character }}
                       </p>
                     </td>
-                    <td v-if="index+1< hits._source.cv_list.cv.length">
-                      <template v-if="hits._source.cv_list.cv[index+1].indexOf(list.key) != -1">
+                    <td v-if="index+1< hits._source.cv_list.character.length">
+                      <template v-if="hits._source.cv_list.character[index+1].indexOf(list.key) != -1">
                         <p style="color:#C00000;margin-left:20px;width:100%">
-                          {{ hits._source.cv_list.cv[index+1] }}
+                          {{ hits._source.cv_list.character[index+1] }}
                         </p>
                       </template>
 
                       <template v-else>
                         <p style="margin-left:20px;width:100%">
-                          {{ hits._source.cv_list.cv[index+1] }}
+                          {{ hits._source.cv_list.character[index+1] }}
                         </p>
                       </template>
                     </td>
@@ -572,7 +572,7 @@ column-count: 1;
           axios.post('/api1/_search', {
             query: {
               wildcard: {
-                'cv_list.cv': '*' + this.list.key + '*',
+                'cv_list.character': '*' + this.list.key + '*',
               },
             },
 

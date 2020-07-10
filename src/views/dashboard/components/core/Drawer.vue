@@ -102,9 +102,9 @@
           to: '/CV',
         },
         {
-          title: 'rtables',
+          title: 'character',
           icon: 'mdi-clipboard-outline',
-          to: '/tables/regular-tables',
+          to: '/character',
         },
         {
           title: 'typography',

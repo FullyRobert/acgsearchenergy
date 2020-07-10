@@ -4,7 +4,10 @@
       id="HotBloodUL"
       style="list-style:none;"
     >
-      <div align="center">
+      <div
+        align="center"
+        style="margin-top: 10px"
+      >
         <v-alert
           v-if="list.list===''||list.list.length===0"
           max-width="50%"
@@ -51,11 +54,33 @@
 
               <div class="grey--text ml-4">
                 {{ hits._source.rating_score }}
+                {{ hits._source.areas[0] }}
               </div>
             </v-row>
 
             <div class="my-4 subtitle-1">
-              {{ hits._source.areas[0] }}
+            <v-chip-group
+              column
+            >
+            <v-chip
+              color="success"
+              v-if="hits._source.tag_list.length>0"
+            >
+              {{hits._source.tag_list[0]}}
+            </v-chip>
+            <v-chip
+              color="warning"
+              v-if="hits._source.tag_list.length>1"
+            >
+              {{hits._source.tag_list[1]}}
+            </v-chip>
+            <v-chip
+              color="error"
+              v-if="hits._source.tag_list.length>2"
+            >
+              {{hits._source.tag_list[2]}}
+            </v-chip>
+            </v-chip-group>
             </div>
 
             <div style="width:90%">
@@ -521,7 +546,7 @@
         list: {
 
           key: '',
-          list: 1,
+          list: '',
         },
       }
     },

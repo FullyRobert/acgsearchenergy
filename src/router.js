@@ -13,7 +13,7 @@ export default new Router({
       children: [
         // Dashboard
         {
-          name: '热血系动漫',
+          name: '番剧',
           path: '',
           component: () => import('@/views/dashboard/Dashboard'),
         },
@@ -24,9 +24,9 @@ export default new Router({
           component: () => import('@/views/dashboard/CV'),
         },
         {
-          name: '治愈系动漫',
-          path: 'components/notifications',
-          component: () => import('@/views/dashboard/component/Notifications'),
+          name: '角色',
+          path: '/character',
+          component: () => import('@/views/dashboard/character'),
         },
         {
           name: '悬疑系动漫',
