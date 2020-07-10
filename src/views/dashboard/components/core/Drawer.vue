@@ -94,7 +94,7 @@
         {
           icon: 'mdi-view-dashboard',
           title: 'dashboard',
-          to: '/',
+          to: '/search',
         },
         {
           icon: 'mdi-account',
