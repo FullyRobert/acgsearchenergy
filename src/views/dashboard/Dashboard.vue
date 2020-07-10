@@ -1,5 +1,5 @@
 <template>
-  <div style="float:top">
+  <div style="float:top;">
     <div
       align="center"
       style="margin-top: 10px;margin-left:10px"
@@ -42,7 +42,8 @@
      display: inline-block;
      column-count: 4;
      column-width: 20%;
-     column-gap:5%;"
+     column-gap:5%;
+     "
     >
       <li
         v-for="hits in list.list"
@@ -184,6 +185,11 @@
         },
       }
     },
+    // computed: {
+    //   scrollerHeight: function () {
+    //     if (Math.floor((((this.list.list.length - 1) / 4) < 1))) { return (Math.floor(((this.list.list.length - 1) / 4 + 1)) * 45 + '%') } else { return (Math.floor(((this.list.list.length - 1) / 4)) * 30 + 50 + '%') }
+    //   },
+    // },
     watch: {
       'list.key': {
         handler (newValue, oldValue) {
@@ -196,6 +202,7 @@
           //   },
           // }
           axios.post('/api1/_search', {
+            size: 10,
             query: {
               wildcard: {
                 name: '*' + this.list.key + '*',
@@ -205,9 +212,9 @@
             //   return Qs.stringify(params, { arrayFormat: 'brackets' })
             // },
           }).then((res) => {
+            console.log(res.data.hits.hits)
             res = res.data.hits.hits
             this.$set(this.list, 'list', res)
-            console.log(this.list.key)
           }).catch((error) => {
             console.warn(error)
           })
@@ -220,6 +227,7 @@
         console.log(this.list.key)
       })
     },
+
     methods: {
       reserve () {
         this.loading = true
@@ -266,6 +274,7 @@
       },
       SortByHot () {
         axios.post('/api1/_search', {
+          size: 10,
           query: {
             wildcard: {
               name: '*' + this.list.key + '*',
