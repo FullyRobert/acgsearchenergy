@@ -31,8 +31,8 @@
           contain
         >
           <v-img
-            src="https://demos.creative-tim.com/vuetify-material-dashboard/favicon.ico"
-            max-height="30"
+            src="https://img.moegirl.org/common/thumb/4/46/Shinomiya_Kaguya.jpg/280px-Shinomiya_Kaguya.jpg"
+            max-height="50"
           />
         </v-list-item-avatar>
 
@@ -107,9 +107,9 @@
           to: '/character',
         },
         {
-          title: 'typography',
+          title: 'tags',
           icon: 'mdi-format-font',
-          to: '/components/typography',
+          to: '/tags',
         },
         {
           title: 'icons',

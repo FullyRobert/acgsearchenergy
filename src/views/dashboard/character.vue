@@ -2,7 +2,7 @@
   <div style="float:top">
       <div
         align="center"
-        style="margin-top: 10px"
+        style="margin-top: 10px;margin-left:10px"
       >
         <v-alert
           v-if="list.list===''||list.list.length===0"

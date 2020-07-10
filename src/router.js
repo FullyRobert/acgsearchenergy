@@ -29,9 +29,9 @@ export default new Router({
           component: () => import('@/views/dashboard/character'),
         },
         {
-          name: '悬疑系动漫',
-          path: 'components/icons',
-          component: () => import('@/views/dashboard/component/Icons'),
+          name: '分类',
+          path: '/tags',
+          component: () => import('@/views/dashboard/Tags'),
         },
         {
           name: '奇幻系动漫',

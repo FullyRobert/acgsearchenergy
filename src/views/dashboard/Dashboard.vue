@@ -2,7 +2,7 @@
   <div style="float:top">
     <div
       align="center"
-      style="margin-top: 10px"
+      style="margin-top: 10px;margin-left:10px"
     >
       <v-alert
         v-if="list.list===''||list.list.length===0"
@@ -33,12 +33,13 @@
             >
               按热度排序
             </v-chip>
-      </v-chip-group>
+          </v-chip-group>
     </div>
     <ul
       id="HotBloodUL"
       style="     margin-left:2%;
      width: 96%;
+     display: inline-block;
      column-count: 4;
      column-width: 20%;
      column-gap:5%;"
@@ -144,13 +145,13 @@
                     </td>
                     <td v-if="index+1< hits._source.cv_list.cv.length">
                       <template v-if="hits._source.cv_list.cv[index+1].indexOf(list.key) != -1">
-                        <p style="color:#C00000;margin-left:70px;width:140%">
+                        <p style="color:#C00000;margin-left:40%;width:140%">
                           {{ hits._source.cv_list.cv[index+1] }}
                         </p>
                       </template>
 
                       <template v-else>
-                        <p style="margin-left:70px;width:140%">
+                        <p style="margin-left:40%;width:140%">
                           {{ hits._source.cv_list.cv[index+1] }}
                         </p>
                       </template>
