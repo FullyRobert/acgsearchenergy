@@ -33,7 +33,7 @@ export default new Router({
           component: () => import('@/views/dashboard/character'),
         },
         {
-          name: '分类',
+          name: '标签',
           path: '/tags',
           component: () => import('@/views/dashboard/Tags'),
         },
