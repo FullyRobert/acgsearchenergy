@@ -62,5 +62,10 @@ export default new Router({
         },
       ],
     },
+    {
+      path: 'comic',
+      name: 'comic',
+      component: () => import('@/views/dashboard/Comic'),
+    },
   ],
 })

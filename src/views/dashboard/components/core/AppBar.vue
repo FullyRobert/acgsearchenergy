@@ -179,7 +179,14 @@
     computed: {
       ...mapState(['drawer']),
     },
-
+    mounted: function () {
+      Bus.$on('SearchContent', (data) => {
+        this.input = data
+        this.SearchContent = data
+        console.log('yes' + this.SearchContent)
+        Bus.$emit('Search', this.SearchContent)
+      })
+    },
     methods: {
       ...mapMutations({
         setDrawer: 'SET_DRAWER',
@@ -189,7 +196,6 @@
         console.log('trigger method Search')
         Bus.$emit('Search', this.SearchContent)
       },
-
     },
   }
 </script>

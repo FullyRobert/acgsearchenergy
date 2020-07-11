@@ -92,7 +92,8 @@
       GetSearchContent (e) {
         this.SearchContent = this.input
         console.log('trigger method Search: ' + this.SearchContent)
-        Bus.$emit('Search', this.SearchContent)
+        Bus.$emit('SearchContent', this.SearchContent)
+        this.$router.push('/search')
       },
     },
   }

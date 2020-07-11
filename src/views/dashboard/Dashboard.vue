@@ -60,6 +60,7 @@
           <v-img
             height="15%"
             :src="hits._source.cover_url"
+            @click="Skip(hits)"
           />
 
           <v-card-title>{{ hits._source.name }}</v-card-title>
@@ -179,7 +180,6 @@
         loading: false,
         selection: 1,
         list: {
-
           key: '',
           list: '',
         },
@@ -224,7 +224,7 @@
     mounted: function () {
       Bus.$on('Search', (data) => {
         this.list.key = data
-        console.log(this.list.key)
+        console.log('Bus' + this.list.key)
       })
     },
 
@@ -233,6 +233,9 @@
         this.loading = true
 
         setTimeout(() => (this.loading = false), 2000)
+      },
+      Skip (hits) {
+        this.$router.push({ name: 'comic', params: { hits: hits } })
       },
       complete (index) {
         this.list[index] = !this.list[index]
