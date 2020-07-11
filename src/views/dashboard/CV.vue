@@ -1,35 +1,31 @@
 <template>
   <div style="float:top">
     <div
-      class="mt-4"
-      align="center"
-    >
-      <b-card
-        img-src="https://placekitten.com/300/300"
-        img-alt="Card image"
-        img-right
-        style="width:70%;"
-      >
-        <b-card-text>
-          Some quick example text to build on the card and make up the bulk of the card's content.
-        </b-card-text>
-      </b-card>
-    </div>
-    <div
       align="center"
       style="margin-top: 10px"
     >
       <v-alert
-        v-if="list.list===''||list.list.length===0"
+        v-if="list.length===''||list.length===0"
         max-width="50%"
         color="warning"
       >
         找不到与您输入的关键词相匹配的词条，请重试
       </v-alert>
-      <v-chip-group
-        v-if="list.list!==''&&list.list.length!==0"
-        column
+      <div
+        class="grey--text ml-4"
+        v-if="list.length===''||list.length===0"
       >
+        <p
+          class="text-h3"
+        >
+          相关推荐
+        </p>
+        <v-divider></v-divider>
+      </div>
+        <v-chip-group
+          column
+          v-if="list.length!==''&&list.length!==0"
+        >
         <v-chip
           color="success"
           @click="SortByDefault()"
@@ -74,6 +70,7 @@
           <v-img
             height="15%"
             :src="hits._source.cover_url"
+            @click="Skip(hits)"
           />
 
           <v-card-title>{{ hits._source.name }}</v-card-title>
@@ -124,7 +121,7 @@
             </div>
 
             <div style="width:90%">
-              {{ hits._source.description }}...
+              {{ hits._source.short_description }}...
             </div>
           </v-card-text>
 
@@ -203,7 +200,7 @@
         loading: false,
         selection: 1,
         list: {
-
+          length: '',
           key: '',
           list: '',
         },
@@ -214,6 +211,7 @@
         handler (newValue, oldValue) {
           console.log('value changed')
           axios.post('/api1/_search', {
+            size: 20,
             query: {
               wildcard: {
                 'cv_list.cv': '*' + this.list.key + '*',
@@ -222,11 +220,37 @@
           }).then((res) => {
             res = res.data.hits.hits
             this.$set(this.list, 'list', res)
+            if (this.list.length === 0 && res.length === 0) {
+              this.$set(this.list, 'length', '')
+            } else {
+              this.$set(this.list, 'length', res.length)
+            }
             console.log(this.list)
           }).catch((error) => {
             console.warn(error)
           })
         },
+      },
+      'list.length': {
+        handler (newValue, oldValue) {
+          if (this.list.length === '' || this.list.length === 0) {
+            axios.post('/api1/_search', {
+              size: 20,
+              query: {
+                wildcard: {
+                  'cv_list.cv': '*花泽香菜*',
+                },
+              },
+            }).then((res) => {
+              res = res.data.hits.hits
+              this.$set(this.list, 'list', res)
+            }).catch((error) => {
+              console.warn(error)
+            })
+          }
+        },
+        deep: true,
+        immediate: true,
       },
     },
     mounted: function () {
@@ -245,6 +269,7 @@
       },
       SortByGrade () {
         axios.post('/api1/_search', {
+          size: 20,
           query: {
             wildcard: {
               'cv_list.cv': '*' + this.list.key + '*',
@@ -264,6 +289,7 @@
       },
       SortByDefault () {
         axios.post('/api1/_search', {
+          size: 20,
           query: {
             wildcard: {
               'cv_list.cv': '*' + this.list.key + '*',
@@ -280,6 +306,7 @@
       },
       SortByHot () {
         axios.post('/api1/_search', {
+          size: 20,
           query: {
             wildcard: {
               'cv_list.cv': '*' + this.list.key + '*',
@@ -296,6 +323,9 @@
           console.warn(error)
         })
         console.log('SortByGrade')
+      },
+      Skip (hits) {
+        this.$router.push({ name: 'comic', params: { hits: hits } })
       },
     },
   }
