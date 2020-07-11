@@ -1,5 +1,5 @@
 {
-  "lint": "eslint  --fix --ext .js .vue src ",
+  "lint": "eslint   --ext .js .vue src --fix ",
   "name": "vuetify-material-dashboard",
   "version": "2.1.0",
   "private": true,

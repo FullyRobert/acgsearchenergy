@@ -219,10 +219,13 @@
             console.warn(error)
           })
         },
+        deep: true,
+        immediate: true,
       },
     },
     mounted: function () {
       Bus.$on('Search', (data) => {
+        console.log('origin' + this.list.key)
         this.list.key = data
         console.log('Bus' + this.list.key)
       })
