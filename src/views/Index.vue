@@ -79,10 +79,9 @@
 
 <script>
   import backgroundUrl from '@/assets/wuming.png'
-  import Bus from '../Bus.js'
   // Utilities
-
   export default {
+
     name: 'Index',
     components: {
       DashboardCoreView: () => import('./dashboard/components/core/View'),
@@ -92,8 +91,7 @@
       GetSearchContent (e) {
         this.SearchContent = this.input
         console.log('trigger method Search: ' + this.SearchContent)
-        Bus.$emit('SearchContent', this.SearchContent)
-        this.$router.push('/search')
+        this.$router.push({ name: '番剧', params: { name: this.SearchContent } })
       },
     },
   }

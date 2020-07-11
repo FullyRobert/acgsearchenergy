@@ -13,6 +13,7 @@
             </option>
           </select>
           <input
+            v-model="Content"
             type="text"
             placeholder="搜索你要找的番剧"
             @keyup.enter="Skip($event)"
@@ -33,8 +34,7 @@
           <div class="row ipad-width2">
             <div class="col-md-4 col-sm-12 col-xs-12">
               <div
-              class="movie-img sticky-sb"
-              style="position:fixed;width:20%;height:20%;margin-top:14%"
+                class="movie-img sticky-sb"
               >
                 <img
                   :src="comic._source.cover_url"
@@ -132,10 +132,12 @@
                         class="tab active"
                       >
                         <div class="row">
-                          <div class="col-md-8 col-sm-12 col-xs-12">
-                            <span
-                              style="letter-spacing:0.1em;line-height:25px"
-                            >{{ comic._source.description }}</span>
+                          <div
+                            class="col-md-8 col-sm-12 col-xs-12"
+                            style="white-space: pre-line"
+                          >
+                            {{ comic._source.long_description }}
+
                             <div class="title-hd-sm">
                               <h4>角色声优</h4>
                             </div>
@@ -276,43 +278,48 @@
                   </div>
                 </div>
               </div>
-            <div
-                            class="title-hd-sm"
-                            style="width:100%;height:1%"
-                            >
-                              <h4>视频</h4>
-                            </div>
-                            <!-- movie user review -->
-                            <div style="height:20%">
-                            <iframe
-                                src="//player.bilibili.com/player.html?aid=2248863&amp;cid=3502260&amp;page=1&amp;danmaku=0"
-                                allowfullscreen="allowfullscreen"
-                                width="100%"
-                                height="150%"
-                                scrolling="no"
-                                frameborder="0"
-                                sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"
-                                style="margin-bottom:20%"
-                              />
-                              </div>
+              <div
+                class="title-hd-sm"
+
+                style="width:126%;height:1%;margin-left:-40%;align-items: center;
+justify-content: center;"
+              >
+                <h4 style="text-align:center">
+                  相关视频
+                </h4>
+              </div>
+              <!-- movie user review -->
+              <div style="height:20%">
+                <iframe
+                  :src="src()"
+                  allowfullscreen="allowfullscreen"
+                  width="125%"
+                  height="150%"
+                  scrolling="no"
+                  frameborder="0"
+                  sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"
+                  style="margin-bottom:20%;margin-left:-40%;"
+                />
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <dashboard-core-view style="margin-top:30%"></dashboard-core-view>
+      <dashboard-core-view style="margin-top:30%" />
     </div>
   </div>
 </template>
 <script>
-  import Bus from '../../Bus.js'
   export default {
     name: 'Comic',
     components: {
       DashboardCoreView: () => import('./components/core/View'),
     },
     data () {
+      this.$route.params.hits._source.long_description = this.$route.params.hits._source.long_description.replace(/\\n/g, '\n')
       const n = Math.floor(this.$route.params.hits._source.rating_score)
       return {
+        Content: '',
         number: n,
         comic: this.$route.params.hits,
       }
@@ -322,8 +329,11 @@
         return Math.floor(this.$route.params.hits._source.rating_score)
       },
       Skip (e) {
-        Bus.$emit('SearchContent', this.input)
-        this.$router.push('/search')
+        this.$router.push({ name: '番剧', params: { name: this.Content } })
+      },
+      src () {
+        return '//player.bilibili.com/player.html?aid=' + this.$route.params.hits._source.episodes[0].aid +
+          '&amp;cid=' + this.$route.params.hits._source.episodes[0].cid + '&amp;page=' + '&amp;danmaku=0&quot;'
       },
     },
   }

@@ -11,29 +11,29 @@
       >
         找不到与您输入的关键词相匹配的词条，请重试
       </v-alert>
-          <v-chip-group
-              column
-              v-if="list.list!==''&&list.list.length!==0"
-            >
-            <v-chip
-              color="success"
-              @click="SortByDefault()"
-            >
-              按相关性排序
-            </v-chip>
-            <v-chip
-              color="warning"
-              @click="SortByGrade()"
-            >
-              按评分排序
-            </v-chip>
-            <v-chip
-              color="error"
-              @click="SortByHot()"
-            >
-              按热度排序
-            </v-chip>
-          </v-chip-group>
+      <v-chip-group
+        v-if="list.list!==''&&list.list.length!==0"
+        column
+      >
+        <v-chip
+          color="success"
+          @click="SortByDefault()"
+        >
+          按相关性排序
+        </v-chip>
+        <v-chip
+          color="warning"
+          @click="SortByGrade()"
+        >
+          按评分排序
+        </v-chip>
+        <v-chip
+          color="error"
+          @click="SortByHot()"
+        >
+          按热度排序
+        </v-chip>
+      </v-chip-group>
     </div>
     <ul
       id="HotBloodUL"
@@ -111,7 +111,7 @@
             </div>
 
             <div style="width:90%">
-              {{ hits._source.description }}...
+              {{ hits._source.short_description }}...
             </div>
           </v-card-text>
 
@@ -180,7 +180,7 @@
         loading: false,
         selection: 1,
         list: {
-          key: '',
+          key: this.$route.params.name,
           list: '',
         },
       }
@@ -193,6 +193,8 @@
     watch: {
       'list.key': {
         handler (newValue, oldValue) {
+          console.log('new:' + newValue)
+          console.log('old:' + oldValue)
           console.log('value changed')
           // const obj = {
           //   query: {
