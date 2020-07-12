@@ -193,6 +193,7 @@
         loading: false,
         selection: 1,
         list: {
+          word: '',
           length: '',
           length2: '',
           key: this.$route.params.name,
@@ -240,6 +241,7 @@
       },
       'list.length': {
         handler (newValue, oldValue) {
+          console.log('list.key' + this.list.key)
           if (this.list.length === '' || this.list.length === 0) {
             const Random = ['小姐', '异世界', '1', '学', '柯南']
             const SearchContent = '*' + Random[Math.floor(Math.random() * 5)] + '*'
@@ -279,7 +281,7 @@
         setTimeout(() => (this.loading = false), 2000)
       },
       Skip (hits) {
-        this.$router.push({ name: 'comic', params: { hits: hits } })
+        this.$router.push({ name: 'comic', params: { hits: hits, word: this.list.word } })
       },
       complete (index) {
         this.list[index] = !this.list[index]

@@ -72,6 +72,12 @@
                     </div>
                   </div>
                 </div>
+                <div class="word-cloud-chart">
+                  <div
+                    id="chart2"
+                    class="word-cloud-bg"
+                  />
+                </div>
               </div>
             </div>
             <div class="col-md-8 col-sm-12 col-xs-12">
@@ -315,6 +321,8 @@ justify-content: center;"
   </div>
 </template>
 <script>
+  import Js2WordCloud from 'js2wordcloud'
+  import axios from 'axios'
 
   export default {
     name: 'Comic',
@@ -325,10 +333,51 @@ justify-content: center;"
       this.$route.params.hits._source.long_description = this.$route.params.hits._source.long_description.replace(/\\n/g, '\n')
       const n = Math.floor(this.$route.params.hits._source.rating_score)
       return {
+        word: '',
         Content: '',
         number: n,
         comic: this.$route.params.hits,
       }
+    },
+    mounted () {
+      axios.post('/api3/_search', {
+        size: 1,
+        query: {
+          match: {
+            name: '*' + this.comic._source.name + '*',
+          },
+        },
+      }).then((res) => {
+        res = res.data.hits.hits
+        this.word = res
+        var wc = new Js2WordCloud(document.getElementById('chart2'))
+        const list = []
+        console.log('this.word[0]._source.wordCloud.length' + this.word[0]._source.wordCloud.length)
+        for (let i = 0; i < this.word[0]._source.wordCloud.length; i++) {
+          list.push([this.word[0]._source.wordCloud[i].key, this.word[0]._source.wordCloud[i].value])
+        }
+        const option = {
+          imageShape: require('../images/test3.png'),
+          fontSizeFactor: 0.0000001,
+          tooltip: {
+            show: true,
+            formatter: function (item) {
+              return item[0]
+            },
+          },
+          maxFontSize: 25,
+          minFontSize: 0.0000000000001,
+          color: 'random-light',
+          backgroundColor: 'rgba(0,0,0,.0)',
+          list: list,
+        }
+        wc.setOption(option)
+        window.onresize = function () {
+          wc.setOption(option)
+        }
+      }).catch((error) => {
+        console.warn(error)
+      })
     },
     methods: {
       getnumber () {
@@ -51627,5 +51676,10 @@ html.ios {
 
 .slick-arrow.slick-hidden {
   display: none;
+}
+.word-cloud-bg{
+    width: 100%;
+    height: 500px;
+    background-size: 100% 100%;
 }
 </style>
