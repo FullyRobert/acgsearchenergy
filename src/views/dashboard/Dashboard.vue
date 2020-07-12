@@ -5,7 +5,7 @@
       style="margin-top: 10px;margin-left:10px;"
     >
       <v-alert
-        v-if="list.length2===-1"
+        v-if="list.length2===-1 && list.flag===1 && list.length!==0"
         max-width="50%"
         color="warning"
         style="margin-top:2%"
@@ -195,6 +195,7 @@
         list: {
           length: '',
           length2: '',
+          flag: 1,
           key: this.$route.params.name,
           list: '',
         },
@@ -231,6 +232,8 @@
             console.warn(error)
           })
         },
+        deep: true,
+        immediate: true,
       },
       'list.length': {
         handler (newValue, oldValue) {
@@ -243,8 +246,11 @@
                 },
               },
             }).then((res) => {
-              res = res.data.hits.hits
-              this.$set(this.list, 'list', res)
+              if (this.list.list.length === 0) {
+                console.log('this.list.list' + this.list.list)
+                res = res.data.hits.hits
+                this.$set(this.list, 'list', res)
+              }
             }).catch((error) => {
               console.warn(error)
             })
