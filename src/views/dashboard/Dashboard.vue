@@ -5,7 +5,7 @@
       style="margin-top: 10px;margin-left:10px;"
     >
       <v-alert
-        v-if="list.length2===-1 && list.flag===1 && list.length!==0"
+        v-if="list.length2===-1 && list.key"
         max-width="50%"
         color="warning"
         style="margin-top:2%"
@@ -195,7 +195,6 @@
         list: {
           length: '',
           length2: '',
-          flag: 1,
           key: this.$route.params.name,
           list: '',
         },
@@ -204,6 +203,7 @@
     watch: {
       'list.key': {
         handler (newValue, oldValue) {
+          console.log('list.key' + this.list.key)
           // console.log('new:' + newValue)
           // console.log('old:' + oldValue)
           // console.log('value changed')
@@ -217,8 +217,11 @@
           }).then((res) => {
             res = res.data.hits.hits
             this.$set(this.list, 'list', res)
+
             if (this.list.length === 0 && res.length === 0) {
               this.$set(this.list, 'length', '')
+            } else if (this.list.length === '' && res.length === 0) {
+              this.$set(this.list, 'length', 0)
             } else {
               this.$set(this.list, 'length', res.length)
             }
@@ -237,6 +240,7 @@
       },
       'list.length': {
         handler (newValue, oldValue) {
+          console.log('list.key' + this.list.key)
           if (this.list.length === '' || this.list.length === 0) {
             axios.post('/api1/_search', {
               size: 20,
@@ -247,7 +251,6 @@
               },
             }).then((res) => {
               if (this.list.list.length === 0) {
-                console.log('this.list.list' + this.list.list)
                 res = res.data.hits.hits
                 this.$set(this.list, 'list', res)
               }
