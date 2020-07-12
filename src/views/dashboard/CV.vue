@@ -5,27 +5,29 @@
       style="margin-top: 10px"
     >
       <v-alert
-        v-if="list.length===''||list.length===0"
+        v-if="list.length2===-1"
         max-width="50%"
         color="warning"
+        style="margin-top:2%"
       >
         找不到与您输入的关键词相匹配的词条，请重试
       </v-alert>
+
       <div
-        class="grey--text ml-4"
         v-if="list.length===''||list.length===0"
+        class="grey--text ml-4"
       >
         <p
           class="text-h3"
         >
           相关推荐
         </p>
-        <v-divider></v-divider>
+        <v-divider />
       </div>
-        <v-chip-group
-          column
-          v-if="list.length!==''&&list.length!==0"
-        >
+      <v-chip-group
+        v-if="list.length!==''&&list.length!==0"
+        column
+      >
         <v-chip
           color="success"
           @click="SortByDefault()"
@@ -201,6 +203,7 @@
         selection: 1,
         list: {
           length: '',
+          length2: '',
           key: '',
           list: '',
         },
@@ -220,16 +223,23 @@
           }).then((res) => {
             res = res.data.hits.hits
             this.$set(this.list, 'list', res)
+            console.log('length' + this.list.length === '')
             if (this.list.length === 0 && res.length === 0) {
               this.$set(this.list, 'length', '')
             } else {
               this.$set(this.list, 'length', res.length)
+            }
+            if (res.length === 0) {
+              this.$set(this.list, 'length2', -1)
+            } else {
+              this.$set(this.list, 'length2', res.length)
             }
             console.log(this.list)
           }).catch((error) => {
             console.warn(error)
           })
         },
+
       },
       'list.length': {
         handler (newValue, oldValue) {

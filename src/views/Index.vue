@@ -59,7 +59,7 @@
                 >
                   mdi-heart
                 </v-icon>
-                运气不错
+                欢迎
               </v-btn>
             </v-col>
           </v-row>

@@ -1,59 +1,60 @@
 <template>
   <div style="float:top">
-      <div
-        align="center"
-        style="margin-top: 10px;margin-left:10px"
-      >
+    <div
+      align="center"
+      style="margin-top: 10px;margin-left:10px"
+    >
       <v-alert
-        v-if="list.length===''||list.length===0"
+        v-if="list.length2===-1"
         max-width="50%"
         color="warning"
+        style="margin-top:2%"
       >
         找不到与您输入的关键词相匹配的词条，请重试
       </v-alert>
       <div
-        class="grey--text ml-4"
         v-if="list.length===''||list.length===0"
+        class="grey--text ml-4"
       >
         <p
           class="text-h3"
         >
           相关推荐
         </p>
-        <v-divider></v-divider>
+        <v-divider />
       </div>
-          <v-chip-group
-              column
-              v-if="list.length!==''&&list.length!==0"
-          >
-            <v-chip
-              color="success"
-              @click="SortByDefault()"
-            >
-              按相关性排序
-            </v-chip>
-            <v-chip
-              color="warning"
-              @click="SortByGrade()"
-            >
-              按评分排序
-            </v-chip>
-            <v-chip
-              color="error"
-              @click="SortByHot()"
-            >
-              按热度排序
-            </v-chip>
-          </v-chip-group>
-      </div>
-       <ul
+      <v-chip-group
+        v-if="list.length!==''&&list.length!==0"
+        column
+      >
+        <v-chip
+          color="success"
+          @click="SortByDefault()"
+        >
+          按相关性排序
+        </v-chip>
+        <v-chip
+          color="warning"
+          @click="SortByGrade()"
+        >
+          按评分排序
+        </v-chip>
+        <v-chip
+          color="error"
+          @click="SortByHot()"
+        >
+          按热度排序
+        </v-chip>
+      </v-chip-group>
+    </div>
+    <ul
       id="HotBloodUL"
       style="     margin-left:2%;
      width: 96%;
      column-count: 4;
      column-width: 20%;
      column-gap:5%;"
-      >
+    >
       <li
         v-for="hits in list.list"
         id="HotBloodLI"
@@ -96,28 +97,28 @@
             </v-row>
 
             <div class="my-4 subtitle-1">
-            <v-chip-group
-              column
-            >
-            <v-chip
-              color="success"
-              v-if="hits._source.tag_list.length>0"
-            >
-              {{hits._source.tag_list[0]}}
-            </v-chip>
-            <v-chip
-              color="warning"
-              v-if="hits._source.tag_list.length>1"
-            >
-              {{hits._source.tag_list[1]}}
-            </v-chip>
-            <v-chip
-              color="error"
-              v-if="hits._source.tag_list.length>2"
-            >
-              {{hits._source.tag_list[2]}}
-            </v-chip>
-            </v-chip-group>
+              <v-chip-group
+                column
+              >
+                <v-chip
+                  v-if="hits._source.tag_list.length>0"
+                  color="success"
+                >
+                  {{ hits._source.tag_list[0] }}
+                </v-chip>
+                <v-chip
+                  v-if="hits._source.tag_list.length>1"
+                  color="warning"
+                >
+                  {{ hits._source.tag_list[1] }}
+                </v-chip>
+                <v-chip
+                  v-if="hits._source.tag_list.length>2"
+                  color="error"
+                >
+                  {{ hits._source.tag_list[2] }}
+                </v-chip>
+              </v-chip-group>
             </div>
 
             <div style="width:90%">
@@ -191,6 +192,7 @@
         selection: 1,
         list: {
           length: '',
+          length2: '',
           key: '',
           list: '',
         },
@@ -213,6 +215,11 @@
               this.$set(this.list, 'length', '')
             } else {
               this.$set(this.list, 'length', res.length)
+            }
+            if (res.length === 0) {
+              this.$set(this.list, 'length2', -1)
+            } else {
+              this.$set(this.list, 'length2', res.length)
             }
             console.log(this.list)
           }).catch((error) => {

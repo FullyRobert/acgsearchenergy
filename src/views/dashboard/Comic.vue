@@ -50,7 +50,7 @@
                     </div>
                     <div>
                       <a
-                        href="https://www.youtube.com/embed/o-0hcF97wy0"
+                        :href="comic._source.link"
                         class="item item-2 redbtn fancybox-media hvr-grow"
                       />
                     </div>
@@ -64,7 +64,7 @@
                     </div>
                     <div>
                       <a
-                        href="#"
+                        :href="comic._source.link"
                         class="item item-2 yellowbtn"
                       >
                         <i class="ion-card" />
@@ -89,7 +89,10 @@
                     {{ comic._source.order }}
                   </a>
                   <div class="hover-bnt">
-                    <a class="parent-btn">
+                    <a
+                      class="parent-btn"
+                      :href="comic._source.link"
+                    >
                       <i class="ion-android-share-alt" />
                       {{ comic._index }}
                     </a>
@@ -266,6 +269,7 @@
                                   v-for="cha in comic._source.tag_list"
                                   :key="cha"
                                   class="time"
+                                  style="margin-left:3%"
                                 >
                                   <a>{{ cha }}</a>
                                 </span>
@@ -289,13 +293,14 @@ justify-content: center;"
                 </h4>
               </div>
               <!-- movie user review -->
-              <div style="height:20%">
+              <div style="height:20%;">
                 <iframe
                   :src="src()"
                   allowfullscreen="allowfullscreen"
                   width="125%"
                   height="150%"
                   scrolling="no"
+                  onload="this.height=100%"
                   frameborder="0"
                   sandbox="allow-top-navigation allow-same-origin allow-forms allow-scripts"
                   style="margin-bottom:20%;margin-left:-40%;"
@@ -310,6 +315,7 @@ justify-content: center;"
   </div>
 </template>
 <script>
+
   export default {
     name: 'Comic',
     components: {

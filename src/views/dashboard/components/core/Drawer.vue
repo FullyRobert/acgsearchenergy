@@ -69,7 +69,6 @@
 
       <div />
     </v-list>
-
   </v-navigation-drawer>
 </template>
 

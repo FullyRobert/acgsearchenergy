@@ -5,46 +5,47 @@
       style="margin-top: 10px;margin-left:10px"
     >
       <v-alert
-        v-if="list.length===''||list.length===0"
+        v-if="list.length2===-1"
         max-width="50%"
         color="warning"
+        style="margin-top:2%"
       >
         找不到与您输入的关键词相匹配的词条，请重试
       </v-alert>
       <div
-      class="grey--text ml-4"
-      v-if="list.length===''||list.length===0"
+        v-if="list.length===''||list.length===0"
+        class="grey--text ml-4"
       >
         <p
-        class="text-h3"
+          class="text-h3"
         >
           相关推荐
         </p>
-        <v-divider></v-divider>
+        <v-divider />
       </div>
-          <v-chip-group
-              column
-              v-if="list.length!==''&&list.length!==0"
-            >
-            <v-chip
-              color="success"
-              @click="SortByDefault()"
-            >
-              按相关性排序
-            </v-chip>
-            <v-chip
-              color="warning"
-              @click="SortByGrade()"
-            >
-              按评分排序
-            </v-chip>
-            <v-chip
-              color="error"
-              @click="SortByHot()"
-            >
-              按热度排序
-            </v-chip>
-          </v-chip-group>
+      <v-chip-group
+        v-if="list.length!==''&&list.length!==0"
+        column
+      >
+        <v-chip
+          color="success"
+          @click="SortByDefault()"
+        >
+          按相关性排序
+        </v-chip>
+        <v-chip
+          color="warning"
+          @click="SortByGrade()"
+        >
+          按评分排序
+        </v-chip>
+        <v-chip
+          color="error"
+          @click="SortByHot()"
+        >
+          按热度排序
+        </v-chip>
+      </v-chip-group>
     </div>
     <ul
       id="HotBloodUL"
@@ -190,6 +191,7 @@
         selection: 1,
         list: {
           length: '',
+          length2: '',
           key: '',
           list: '',
         },
@@ -213,6 +215,11 @@
               this.$set(this.list, 'length', '')
             } else {
               this.$set(this.list, 'length', res.length)
+            }
+            if (res.length === 0) {
+              this.$set(this.list, 'length2', -1)
+            } else {
+              this.$set(this.list, 'length2', res.length)
             }
             console.log(this.list.length)
           }).catch((error) => {

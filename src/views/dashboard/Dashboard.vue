@@ -2,17 +2,30 @@
   <div style="float:top;">
     <div
       align="center"
-      style="margin-top: 10px;margin-left:10px"
+      style="margin-top: 10px;margin-left:10px;"
     >
       <v-alert
-        v-if="list.list===''||list.list.length===0"
+        v-if="list.length2===-1"
         max-width="50%"
         color="warning"
+        style="margin-top:2%"
       >
         找不到与您输入的关键词相匹配的词条，请重试
       </v-alert>
+      <div
+        v-if="list.length===''||list.length===0"
+        class="grey--text ml-4"
+      >
+        <p
+          class="text-h3"
+        >
+          相关推荐
+        </p>
+        <v-divider />
+      </div>
+
       <v-chip-group
-        v-if="list.list!==''&&list.list.length!==0"
+        v-if="list.length!==''&&list.length!==0"
         column
       >
         <v-chip
@@ -180,46 +193,62 @@
         loading: false,
         selection: 1,
         list: {
+          length: '',
+          length2: '',
           key: this.$route.params.name,
           list: '',
         },
       }
     },
-    // computed: {
-    //   scrollerHeight: function () {
-    //     if (Math.floor((((this.list.list.length - 1) / 4) < 1))) { return (Math.floor(((this.list.list.length - 1) / 4 + 1)) * 45 + '%') } else { return (Math.floor(((this.list.list.length - 1) / 4)) * 30 + 50 + '%') }
-    //   },
-    // },
     watch: {
       'list.key': {
         handler (newValue, oldValue) {
-          console.log('new:' + newValue)
-          console.log('old:' + oldValue)
-          console.log('value changed')
-          // const obj = {
-          //   query: {
-          //     wildcard: {
-          //       name: this.list.key,
-          //     },
-          //   },
-          // }
+          // console.log('new:' + newValue)
+          // console.log('old:' + oldValue)
+          // console.log('value changed')
           axios.post('/api1/_search', {
-            size: 10,
+            size: 20,
             query: {
               wildcard: {
                 name: '*' + this.list.key + '*',
               },
             },
-            // paramsSerializer: function (params) {
-            //   return Qs.stringify(params, { arrayFormat: 'brackets' })
-            // },
           }).then((res) => {
-            console.log(res.data.hits.hits)
             res = res.data.hits.hits
             this.$set(this.list, 'list', res)
+            if (this.list.length === 0 && res.length === 0) {
+              this.$set(this.list, 'length', '')
+            } else {
+              this.$set(this.list, 'length', res.length)
+            }
+            if (res.length === 0) {
+              this.$set(this.list, 'length2', -1)
+            } else {
+              this.$set(this.list, 'length2', res.length)
+            }
+            console.log(this.list)
           }).catch((error) => {
             console.warn(error)
           })
+        },
+      },
+      'list.length': {
+        handler (newValue, oldValue) {
+          if (this.list.length === '' || this.list.length === 0) {
+            axios.post('/api1/_search', {
+              size: 20,
+              query: {
+                wildcard: {
+                  name: '*二*',
+                },
+              },
+            }).then((res) => {
+              res = res.data.hits.hits
+              this.$set(this.list, 'list', res)
+            }).catch((error) => {
+              console.warn(error)
+            })
+          }
         },
         deep: true,
         immediate: true,
@@ -247,6 +276,7 @@
       },
       SortByGrade () {
         axios.post('/api1/_search', {
+          size: 20,
           query: {
             wildcard: {
               name: '*' + this.list.key + '*',
@@ -266,6 +296,7 @@
       },
       SortByDefault () {
         axios.post('/api1/_search', {
+          size: 20,
           query: {
             wildcard: {
               name: '*' + this.list.key + '*',
@@ -282,7 +313,7 @@
       },
       SortByHot () {
         axios.post('/api1/_search', {
-          size: 10,
+          size: 20,
           query: {
             wildcard: {
               name: '*' + this.list.key + '*',
