@@ -51,7 +51,7 @@
                 outlined
                 color="white"
                 style="margin: 0 0 0 10px"
-                @click="success = false; error = true;"
+                @click="RandomSearchContent($event)"
               >
                 <v-icon
                   left
@@ -59,7 +59,7 @@
                 >
                   mdi-heart
                 </v-icon>
-                欢迎
+                运气不错
               </v-btn>
             </v-col>
           </v-row>
@@ -90,6 +90,12 @@
     methods: {
       GetSearchContent (e) {
         this.SearchContent = this.input
+        console.log('trigger method Search: ' + this.SearchContent)
+        this.$router.push({ name: '番剧', params: { name: this.SearchContent } })
+      },
+      RandomSearchContent (e) {
+        const Random = ['小姐', '异世界', '1', '学', '柯南']
+        this.SearchContent = Random[Math.floor(Math.random() * 5)]
         console.log('trigger method Search: ' + this.SearchContent)
         this.$router.push({ name: '番剧', params: { name: this.SearchContent } })
       },

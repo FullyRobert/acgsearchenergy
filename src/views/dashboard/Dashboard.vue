@@ -145,7 +145,7 @@
                 >
                   <tr v-if="index%2==0">
                     <td
-                      v-if="cv.indexOf(list.key) != -1"
+                      v-if="cv.indexOf(list.key) != -1&&list.key!=''"
                     >
                       <p style="color:#C00000;">
                         {{ cv }}
@@ -159,7 +159,7 @@
                       </p>
                     </td>
                     <td v-if="index+1< hits._source.cv_list.cv.length">
-                      <template v-if="hits._source.cv_list.cv[index+1].indexOf(list.key) != -1">
+                      <template v-if="hits._source.cv_list.cv[index+1].indexOf(list.key) != -1 &&list.key!=''">
                         <p style="color:#C00000;margin-left:40%;width:140%">
                           {{ hits._source.cv_list.cv[index+1] }}
                         </p>
@@ -240,13 +240,14 @@
       },
       'list.length': {
         handler (newValue, oldValue) {
-          console.log('list.key' + this.list.key)
           if (this.list.length === '' || this.list.length === 0) {
+            const Random = ['小姐', '异世界', '1', '学', '柯南']
+            const SearchContent = '*' + Random[Math.floor(Math.random() * 5)] + '*'
             axios.post('/api1/_search', {
               size: 20,
               query: {
                 wildcard: {
-                  name: '*二*',
+                  name: SearchContent,
                 },
               },
             }).then((res) => {
