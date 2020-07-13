@@ -73,6 +73,12 @@
                   </div>
                 </div>
                 <div class="word-cloud-chart">
+                  <h4
+                    align="center"
+                    style="margin-top:30%;"
+                  >
+                    相关词云
+                  </h4>
                   <div
                     id="chart2"
                     class="word-cloud-bg"
@@ -357,7 +363,7 @@ justify-content: center;"
           list.push([this.word[0]._source.wordCloud[i].key, this.word[0]._source.wordCloud[i].value])
         }
         const option = {
-          imageShape: require('../images/test3.png'),
+          imageShape: require('../images/test4.jpg'),
           fontSizeFactor: 0.0000001,
           tooltip: {
             show: true,
@@ -365,10 +371,10 @@ justify-content: center;"
               return item[0]
             },
           },
-          maxFontSize: 25,
+          maxFontSize: 30,
           minFontSize: 0.0000000000001,
           color: 'random-light',
-          backgroundColor: 'rgba(0,0,0,.0)',
+          backgroundColor: 'rgba(0,0,0,0.0)',
           list: list,
         }
         wc.setOption(option)
@@ -51679,7 +51685,7 @@ html.ios {
 }
 .word-cloud-bg{
     width: 100%;
-    height: 500px;
+    height: 400px;
     background-size: 100% 100%;
 }
 </style>
