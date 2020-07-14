@@ -16783,12 +16783,12 @@ footer.full-width-ft .ft-copyright {
   */
 @font-face {
   font-family: "Ionicons";
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.0/fonts/ionicons.eot");
-  src: url("https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.0/fonts/ionicons.eot")
+  src: url("../fonts/ionicons.eot");
+  src: url("../fonts/ionicons.eot")
       format("embedded-opentype"),
-    url("https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.0/fonts/ionicons.ttf")
+    url("../fonts/ionicons.ttf")
       format("truetype"),
-    url("https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.0/fonts/ionicons.woff")
+    url("../fonts/ionicons.woff")
       format("woff"),
     url("https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.0/fonts/ionicons.svg")
       format("svg");
